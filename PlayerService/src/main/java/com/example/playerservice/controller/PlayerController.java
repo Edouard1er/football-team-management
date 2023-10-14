@@ -17,6 +17,12 @@ public class PlayerController {
         this.playerService = playerService;
     }
 
+    @GetMapping("/team/{teamId}")
+    public List<Player> getPlayerByTeamId(@PathVariable Long teamId) {
+        System.out.println(teamId);
+        return playerService.getAllPlayersByTeamId(teamId);
+    }
+
     @GetMapping("/{id}")
     public Player getPlayerById(@PathVariable Long id) {
         return playerService.getPlayerById(id);

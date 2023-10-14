@@ -17,8 +17,13 @@ public class TeamController {
 
     // GET /teams/{id} - Récupérer les détails d'une équipe par son identifiant
     @GetMapping("/{id}")
-    public Team getTeamById(@PathVariable Long id) {
+    public Object getTeamById(@PathVariable Long id) {
         return teamService.getTeamById(id);
+    }
+
+    @GetMapping("/{id}/withPlayerDetails")
+    public Object getTeamByIdWithPlayerDetails(@PathVariable Long id) {
+        return teamService.getTeamByIdWithPlayerDetails(id);
     }
 
     @GetMapping
