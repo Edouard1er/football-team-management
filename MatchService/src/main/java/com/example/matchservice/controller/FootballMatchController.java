@@ -5,6 +5,7 @@ import com.example.matchservice.model.PlayerStatisticsDTO;
 import com.example.matchservice.model.TeamStatisticsDTO;
 import com.example.matchservice.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,11 +33,24 @@ public class FootballMatchController {
         this.teamPlayerService = teamPlayerService;
     }
 
+    @Autowired
+    Environment environment;
+
     @GetMapping
     public List<FootballMatch> getAllFootballMatches() {
         return footballMatchService.getAllFootballMatches();
     }
 
+    @GetMapping("/backend")
+    public String backend() {
+        System.out.println("Inside MyRestController::backend...");
+
+        String serverPort = environment.getProperty("local.server.port");
+
+        System.out.println("Port : " + serverPort);
+
+        return "Hello form Backend!!! " + " Host : localhost " + " :: Port : " + serverPort;
+    }
     @GetMapping("/stats/team/{teamId}")
     public TeamStatisticsDTO  getFootBallMatchStatByTeam(@PathVariable Long teamId) {
         return footballMatchService.getAllFootballMatchStatByTeam(teamId);
