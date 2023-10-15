@@ -10,8 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.Modifier;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 
 import java.util.*;
@@ -44,26 +43,37 @@ public class TeamService {
                 .orElseThrow(() -> new TeamNotFoundException(id));
     }
 
+    @HystrixCommand(fallbackMethod = "fallbackForGetTeamByIdWithPlayerDetails")
     public Object getTeamByIdWithPlayerDetails(Long id) {
 
+        // Effectuez un appel à distance au service PlayerService pour récupérer les informations des joueurs
+        Object players = restTemplate.getForObject("http://player-service/players/team/" + id, Object.class);
+
+        Map<String, Object> teamWithPlayerDetails =getTeamDetails(id);
+        teamWithPlayerDetails.put("players", players);
+
+        // Renvoyez la structure en tant qu'Object
+        return (Object) teamWithPlayerDetails;
+    }
+
+    public Map<String, Object> getTeamDetails(Long id){
         Optional<Team> team = teamRepository.findById(id);
         if (!team.isPresent()) {
             throw new TeamNotFoundException(id);
         }
 
-        // Effectuez un appel à distance au service PlayerService pour récupérer les informations des joueurs
-        Object players = restTemplate.getForObject("http://player-service/players/team/" + id, Object.class);
+        Map<String, Object> teamDetails = new HashMap<>();
+        teamDetails.put("id", team.get().getId());
+        teamDetails.put("name", team.get().getName());
+        teamDetails.put("coach", team.get().getCoach());
+        teamDetails.put("city", team.get().getCity());
 
-        // Créez une structure de données (Map) pour combiner les informations de l'équipe et des joueurs
-        Map<String, Object> teamWithPlayerDetails = new HashMap<>();
-        teamWithPlayerDetails.put("id", team.get().getId());
-        teamWithPlayerDetails.put("name", team.get().getName());
-        teamWithPlayerDetails.put("coach", team.get().getCoach());
-        teamWithPlayerDetails.put("city", team.get().getCity());
-        teamWithPlayerDetails.put("players", players);
+        return  teamDetails;
+    }
 
-        // Renvoyez la structure en tant qu'Object
-        return (Object) teamWithPlayerDetails;
+    public Object fallbackForGetTeamByIdWithPlayerDetails(Long teamId){
+        Map<String, Object> teamDetails =getTeamDetails(teamId);
+        return (Object) teamDetails;
     }
 
     public Team createTeam(Team team) {
@@ -103,7 +113,5 @@ public class TeamService {
         teamRepository.delete(existingTeam);
     }
 
-    public Object getPlayerListByTeamId(Long teamId){
-        return restTemplate.getForObject("http://player-service/players/team/" + teamId, Object.class);
-    }
+
 }
