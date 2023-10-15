@@ -35,8 +35,15 @@ public class StatsController {
     @Autowired
     RestTemplate restTemplate;
 
-    @RequestMapping("/client/frontend")
-    public String hi() {
+    @GetMapping("/match-service/test")
+    @ApiOperation(value = "Test the load balancing of MatchService", response = String.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success|OK"),
+            @ApiResponse(code = 401, message = "Not authorized!"),
+            @ApiResponse(code = 403, message = "Forbidden!!!"),
+            @ApiResponse(code = 404, message = "Not found!!!")
+    })
+    public String MatchServiceLoadBalabnceingTest() {
         String randomString = this.restTemplate.getForObject("http://match-service/football-matches/backend", String.class);
         return "Server Response :: " + randomString;
     }

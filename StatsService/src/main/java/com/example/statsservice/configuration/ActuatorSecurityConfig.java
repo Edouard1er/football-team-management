@@ -10,33 +10,26 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 public class ActuatorSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    /*
-        This spring security configuration does the following
-
-        1. Restrict access to the Shutdown endpoint to the ACTUATOR_ADMIN role.
-        2. Allow access to all other actuator endpoints.
-        3. Allow access to static resources.
-        4. Allow access to the home page (/).
-        5. All other requests need to be authenticated.
-        5. Enable http basic authentication to make the configuration complete.
-           You are free to use any other form of authentication.
-     */
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
+                // Autorise l'accès à l'endpoint Shutdown uniquement aux utilisateurs avec le rôle "ACTUATOR_ADMIN".
                 .requestMatchers(EndpointRequest.to(ShutdownEndpoint.class))
                 .hasRole("ACTUATOR_ADMIN")
+                // Autorise l'accès à tous les autres endpoints Actuator (health, metrics, etc.) sans authentification.
                 .requestMatchers(EndpointRequest.toAnyEndpoint())
                 .permitAll()
+                // Autorise l'accès aux ressources statiques (par exemple, les fichiers CSS) sans authentification.
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
                 .permitAll()
+                // Autorise l'accès aux URL de base ("/" et "/slowApi") sans authentification.
                 .antMatchers("/", "/slowApi")
                 .permitAll()
+                // Exige l'authentification pour toutes les autres URL (par exemple, les endpoints personnalisés de votre application).
                 .antMatchers("/**")
                 .authenticated()
                 .and()
-                .httpBasic();
+                .httpBasic(); // Active l'authentification HTTP de base.
     }
 }
