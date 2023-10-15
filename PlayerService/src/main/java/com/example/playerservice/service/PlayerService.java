@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.lang.reflect.Field;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 @Service
 public class PlayerService {
@@ -51,6 +52,7 @@ public class PlayerService {
     }
 
    // Cette méthode ne respecte clairement pas les bonnes pratiques hahaha, je la fais la plus simple possible
+   @HystrixCommand(fallbackMethod = "fallbackForGetPlayerWithTeamDetails")
     public Object getPlayerWithTeamDetails(Long playerId) {
         Optional<Player> player = playerRepository.findById(playerId);
         if (!player.isPresent()) {
@@ -71,8 +73,12 @@ public class PlayerService {
         return (Object) playerWithTeamDetails;
     }
 
+    // Méthode de fallback pour getPlayerWithTeamDetails
+    public Object fallbackForGetPlayerWithTeamDetails(Long playerId) {
+
+        return new HashMap<>();
+    }
     public Player createPlayer(Player player) {
-        System.out.print(player);
         return playerRepository.save(player);
     }
 
