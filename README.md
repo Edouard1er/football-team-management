@@ -45,3 +45,128 @@ Le projet utilise une structure légèrement dénormalisée pour améliorer les 
 
 14. Vous trouverez des fichiers Dockerfile pour chaque service, ainsi que des fichiers de déploiement Kubernetes prêts à l'emploi.
 
+## Exemples de Requêtes POST et PUT
+
+### TeamService
+
+#### Créer une équipe
+
+```json
+POST /teams
+
+{
+    "city": "Nice",
+    "coach": "Bastien",
+    "name": "Inter Nice FC"
+}
+```
+
+### PlayerService
+
+#### Créer un joueur
+
+```json
+POST /players
+
+{
+    "name": "Ronaldo",
+    "position": "attaquant",
+    "teamId": 5
+}
+
+```
+### MatchService
+
+#### Créer un match de football
+
+```json
+POST /football-matches
+
+{
+    "matchDate": "2023-10-15T21:16:18.000+0000",
+    "refereeName": "Luc",
+    "stadium": "Camp Nou",
+    "winnerId": 3,
+    "perdantId": 2,
+    "homeTeam": 3,
+    "awayTeam": 2,
+    "homeTeamScore": 3,
+    "awayTeamScore": 2,
+    "matchNull": true
+}
+
+
+```
+#### Créer des statistiques d'équipe pour un match
+
+```json
+POST /match-team-stats
+
+{
+    "nombreDeTir": 15,
+    "tirCadre": 7,
+    "but": 5,
+    "possession": 40,
+    "passes": 300,
+    "fautes": 4,
+    "cartonJaune": 1,
+    "cartonRouge": 0,
+    "horsJeu": 3,
+    "corner": 3,
+    "teamId": 5,
+    "match": {
+        "id": 11
+    }
+}
+
+
+```
+#### Enregistrer un buteur
+
+```json
+POST /goalscorers
+
+{
+    "match": {
+        "id" : 11
+    },
+    "goals": 2,
+    "player": 1
+}
+
+
+```
+#### Enregistrer un passeur décisif
+
+```json
+POST /assists
+
+{
+    "assists": 2,
+    "player": 5,
+    "match": {
+        "id": 1
+    }
+}
+
+
+```
+#### Enregistrer la participation d'un joueur
+
+```json
+POST /players-appearances
+
+{
+    "starter": true,
+    "playerId": 48,
+    "teamId": 5,
+    "match": {
+        "id": 13
+    }
+}
+
+```
+## Aide et Contact
+
+# Si vous avez des questions ou rencontrez des problèmes lors de l'exécution du projet, n'hésitez pas à me contacter au 0784862588
+
