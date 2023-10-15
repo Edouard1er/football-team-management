@@ -1,45 +1,69 @@
 package com.example.matchservice.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
+@ApiModel(description = "Football match details")
 public class FootballMatch {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(value = "Match ID")
     private Long id;
+
+    @ApiModelProperty(value = "Date of the match")
     private Date matchDate;
+
+    @ApiModelProperty(value = "Name of the referee")
     private String refereeName;
+
+    @ApiModelProperty(value = "Stadium where the match took place")
     private String stadium;
+
+    @ApiModelProperty(value = "ID of the winning team")
     private Long winnerId;
+
+    @ApiModelProperty(value = "ID of the losing team")
     private Long perdantId;
+
+    @ApiModelProperty(value = "Indicates if the match ended in a draw")
     private boolean isMatchNull;
 
+    @ApiModelProperty(value = "ID of the home team")
     private Long homeTeam;
 
+    @ApiModelProperty(value = "ID of the away team")
     private Long awayTeam;
 
+    @ApiModelProperty(value = "Score of the home team")
     private Long homeTeamScore;
 
+    @ApiModelProperty(value = "Score of the away team")
     private Long awayTeamScore;
 
     @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
     @JsonManagedReference
+    @ApiModelProperty(value = "List of team statistics for the match")
     private List<MatchTeamStat> matchTeamStats;
 
     @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
     @JsonManagedReference
+    @ApiModelProperty(value = "List of goal scorers in the match")
     private List<GoalScorer> goalScorers;
 
     @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
     @JsonManagedReference
+    @ApiModelProperty(value = "List of assists in the match")
     private List<Assist> assists;
 
     @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
     @JsonManagedReference
+    @ApiModelProperty(value = "List of appearance players in the match")
     private List<AppearancePlayer> appearancePlayers;
 
 

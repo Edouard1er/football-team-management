@@ -1,29 +1,56 @@
 package com.example.matchservice.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
+
+@ApiModel(description = "Match team statistics")
 @Entity
 public class MatchTeamStat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(value = "Match team statistics ID")
     private Long id;
+
+    @ApiModelProperty(value = "Number of shots taken by the team")
     private int nombreDeTir;
+
+    @ApiModelProperty(value = "Number of shots on target by the team")
     private int tirCadre;
+
+    @ApiModelProperty(value = "Number of goals scored by the team")
     private int but;
+
+    @ApiModelProperty(value = "Possession percentage of the team")
     private int possession;
+
+    @ApiModelProperty(value = "Number of passes made by the team")
     private int passes;
+
+    @ApiModelProperty(value = "Number of fouls committed by the team")
     private int fautes;
+
+    @ApiModelProperty(value = "Number of yellow cards received by the team")
     private int cartonJaune;
+
+    @ApiModelProperty(value = "Number of red cards received by the team")
     private int cartonRouge;
+
+    @ApiModelProperty(value = "Number of offside situations for the team")
     private int horsJeu;
+
+    @ApiModelProperty(value = "Number of corner kicks awarded to the team")
     private int corner;
 
+    @ApiModelProperty(value = "ID of the team associated with the statistics")
     private Long teamId;
 
     @ManyToOne
     @JoinColumn(name = "match_id")
     @JsonBackReference
+    @ApiModelProperty(value = "Match associated with the team statistics")
     private FootballMatch match;
 
     public Long getId() {

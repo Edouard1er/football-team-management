@@ -3,6 +3,7 @@ package com.example.matchservice.controller;
 import com.example.matchservice.exception.MatchTeamStatNotFoundException;
 import com.example.matchservice.model.MatchTeamStat;
 import com.example.matchservice.service.MatchTeamStatService;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/match-team-stats")
+@Api(value = "Match Team Stat Controller", description = "API endpoints for match team statistics")
 public class MatchTeamStatController {
     private final MatchTeamStatService matchTeamStatService;
 
@@ -20,12 +22,28 @@ public class MatchTeamStatController {
     }
 
     @GetMapping
+    @ApiOperation(value = "Get all match team statistics", response = List.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success|OK"),
+            @ApiResponse(code = 401, message = "Not authorized!"),
+            @ApiResponse(code = 403, message = "Forbidden!!!"),
+            @ApiResponse(code = 404, message = "Not found!!!")
+    })
     public List<MatchTeamStat> getAllMatchTeamStats() {
         return matchTeamStatService.getAllMatchTeamStats();
     }
 
     @GetMapping("/{id}")
-    public MatchTeamStat getMatchTeamStatById(@PathVariable Long id) {
+    @ApiOperation(value = "Get match team statistics by ID", response = MatchTeamStat.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success|OK"),
+            @ApiResponse(code = 401, message = "Not authorized!"),
+            @ApiResponse(code = 403, message = "Forbidden!!!"),
+            @ApiResponse(code = 404, message = "Not found!!!")
+    })
+    public MatchTeamStat getMatchTeamStatById(
+            @ApiParam(value = "Match Team Stat ID", required = true)
+            @PathVariable Long id) {
         Optional<MatchTeamStat> matchTeamStat = matchTeamStatService.getMatchTeamStatById(id);
         if (matchTeamStat.isPresent()) {
             return matchTeamStat.get();
@@ -36,17 +54,47 @@ public class MatchTeamStatController {
     }
 
     @PostMapping
-    public MatchTeamStat createMatchTeamStat(@RequestBody MatchTeamStat matchTeamStat) {
+    @ApiOperation(value = "Create a new match team statistic", response = MatchTeamStat.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success|OK"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 401, message = "Not authorized!"),
+            @ApiResponse(code = 403, message = "Forbidden!!!")
+    })
+    public MatchTeamStat createMatchTeamStat(
+            @ApiParam(value = "Match Team Stat data", required = true)
+            @RequestBody MatchTeamStat matchTeamStat) {
         return matchTeamStatService.createMatchTeamStat(matchTeamStat);
     }
 
     @PutMapping("/{id}")
-    public MatchTeamStat updateMatchTeamStat(@PathVariable Long id, @RequestBody MatchTeamStat updatedMatchTeamStat) {
+    @ApiOperation(value = "Update an existing match team statistic", response = MatchTeamStat.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success|OK"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 401, message = "Not authorized!"),
+            @ApiResponse(code = 403, message = "Forbidden!!!"),
+            @ApiResponse(code = 404, message = "Not found!!!")
+    })
+    public MatchTeamStat updateMatchTeamStat(
+            @ApiParam(value = "Match Team Stat ID", required = true)
+            @PathVariable Long id,
+            @ApiParam(value = "Updated match team statistic data", required = true)
+            @RequestBody MatchTeamStat updatedMatchTeamStat) {
         return matchTeamStatService.updateMatchTeamStat(id, updatedMatchTeamStat);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteMatchTeamStat(@PathVariable Long id) {
+    @ApiOperation(value = "Delete a match team statistic by ID")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "No content"),
+            @ApiResponse(code = 401, message = "Not authorized!"),
+            @ApiResponse(code = 403, message = "Forbidden!!!"),
+            @ApiResponse(code = 404, message = "Not found!!!")
+    })
+    public void deleteMatchTeamStat(
+            @ApiParam(value = "Match Team Stat ID", required = true)
+            @PathVariable Long id) {
         matchTeamStatService.deleteMatchTeamStat(id);
     }
 }

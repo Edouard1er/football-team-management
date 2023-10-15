@@ -1,15 +1,20 @@
 package com.example.matchservice.model;
 
-import com.example.matchservice.model.FootballMatch;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 
+@ApiModel(description = "Player assists in a football match")
 @Entity
 public class Assist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(value = "Assist ID")
     private Long id;
+
+    @ApiModelProperty(value = "Number of assists by the player")
     private int assists;
 
     @ManyToOne
@@ -17,8 +22,10 @@ public class Assist {
     @JsonBackReference
     private FootballMatch match;
 
+    @ApiModelProperty(value = "Player ID")
     private Long player;
 
+    // Getters and setters
     public Long getId() {
         return id;
     }

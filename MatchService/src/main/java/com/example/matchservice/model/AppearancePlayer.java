@@ -1,19 +1,26 @@
 package com.example.matchservice.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 
+@ApiModel(description = "Player appearance in a football match")
 @Entity
 public class AppearancePlayer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(value = "Appearance ID")
     private Long id;
 
+    @ApiModelProperty(value = "Player ID")
     private Long playerId;
 
+    @ApiModelProperty(value = "Team ID to which the player belongs")
     private Long teamId;
 
+    @ApiModelProperty(value = "Indicates if the player was a starter")
     private boolean isStarter;
 
     @ManyToOne

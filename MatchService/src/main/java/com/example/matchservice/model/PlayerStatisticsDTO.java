@@ -1,11 +1,21 @@
 package com.example.matchservice.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
+@ApiModel(description = "Player statistics data transfer object")
 public class PlayerStatisticsDTO {
 
+    @ApiModelProperty(value = "Player information")
     private Object player;
+
+    @ApiModelProperty(value = "Number of appearances by the player")
     private Integer appearances;
+
+    @ApiModelProperty(value = "Number of goals scored by the player")
     private Integer goalsScored;
+
+    @ApiModelProperty(value = "Number of assists made by the player")
     private Integer assists;
 
     public PlayerStatisticsDTO() {
@@ -18,9 +28,10 @@ public class PlayerStatisticsDTO {
         this.assists = assists;
     }
 
-    public  Object getPlayer(){
-        return  player;
+    public Object getPlayer() {
+        return player;
     }
+
     public Integer getAppearances() {
         return appearances;
     }
