@@ -49,22 +49,23 @@ public class FootballMatch {
     @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
     @JsonManagedReference
     @ApiModelProperty(value = "List of team statistics for the match")
-    private List<MatchTeamStat> matchTeamStats;
+    private List<MatchTeamStat> matchTeamStats = new ArrayList<>(); // Initialisation avec une ArrayList vide
 
     @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
     @JsonManagedReference
     @ApiModelProperty(value = "List of goal scorers in the match")
-    private List<GoalScorer> goalScorers;
+    private List<GoalScorer> goalScorers = new ArrayList<>(); // Initialisation avec une ArrayList vide
 
     @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
     @JsonManagedReference
     @ApiModelProperty(value = "List of assists in the match")
-    private List<Assist> assists;
+    private List<Assist> assists = new ArrayList<>(); // Initialisation avec une ArrayList vide
 
     @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
     @JsonManagedReference
     @ApiModelProperty(value = "List of appearance players in the match")
-    private List<AppearancePlayer> appearancePlayers;
+    private List<AppearancePlayer> appearancePlayers = new ArrayList<>(); // Initialisation avec une ArrayList vide
+
 
 
     public Long getId() {
@@ -179,7 +180,7 @@ public class FootballMatch {
         this.assists = assists;
     }
 
-    public List<Map<String, Object>> getMatchPlayedPlayers() {
+    public List<Map<String, Object>> getAppearancePlayers() {
         // Regrouper les joueurs par équipe et stocker les identifiants des joueurs dans une liste
         Map<Long, List<Long>> playersGroupedByTeamId = appearancePlayers.stream()
                 .collect(Collectors.groupingBy(
@@ -202,7 +203,7 @@ public class FootballMatch {
     }
 
 
-    public void setMatchPlayedPlayers(List<AppearancePlayer> appearancePlayers) {
+    public void setAppearancePlayers(List<AppearancePlayer> appearancePlayers) {
         this.appearancePlayers = appearancePlayers;
     }
 }
