@@ -1,5 +1,53 @@
 # Projet de Gestion d'Équipes de Football
 
+Ce projet vise à gérer des équipes de football, les joueurs qui les composent et les matchs qui les opposent. Voici la logique de base du projet :
+
+## Équipes
+
+- Dans ce projet, nous avons des équipes de football.
+- La base de données partagée contient initialement quatre équipes.
+- Chaque équipe est caractérisée par un nom, un entraîneur et une ville.
+
+## Joueurs
+
+- Chaque équipe compte 11 joueurs répartis en attaquants, milieux, défenseurs et un gardien.
+- Chaque joueur est affilié à une seule équipe.
+- Les joueurs sont enregistrés avec des informations telles que leur nom et leur poste.
+
+## Matchs
+
+- Chaque match oppose deux équipes, l'une à domicile et l'autre à l'extérieur.
+- Pour chaque match, il y a deux équipes en compétition.
+- Chaque match enregistre des informations telles que la date, l'arbitre, le stade, le score, le vainqueur et le perdant, ou encore un match nul.
+- Des buts peuvent être marqués lors des matchs.
+
+## Statistiques d'Équipe
+
+- Pour chaque match, des statistiques d'équipe sont enregistrées. Cela inclut :
+  - Nombre de tirs
+  - Tirs cadrés
+  - Buts marqués
+  - Fautes commises
+  - Cartons jaunes et rouges
+  - Hors-jeu
+  - Corners
+  - Nombre de passes
+  - Possession de balle
+
+## Détails des Joueurs
+
+- Chaque match enregistre les joueurs qui y ont participé, les buteurs et les passeurs décisifs.
+- Ces données permettent de suivre la performance des joueurs au fil des matchs.
+
+## Statistiques pour la Saison
+
+- L'ensemble de ces données permet de fournir des statistiques pour un joueur ou une équipe sur l'ensemble de la saison.
+
+Ce projet vise à fournir un système de gestion complet pour les équipes de football, des joueurs individuels aux performances d'équipe.
+
+Pour plus de détails sur l'utilisation de l'API et les exemples de requêtes, consultez la documentation de l'API ci-dessous et celui de swagger pour chacun des services.
+
+
 ## Prérequis
 Avant de lancer ce projet, assurez-vous d'avoir installé les éléments suivants sur votre système :
 - Java 1.8 (Azul Community)
@@ -45,14 +93,276 @@ Le projet utilise une structure légèrement dénormalisée pour améliorer les 
 
 14. Vous trouverez des fichiers Dockerfile pour chaque service, ainsi que des fichiers de déploiement Kubernetes prêts à l'emploi.
 
-## Exemples de Requêtes POST et PUT
+# Exemples de Réponses aux Requêtes GET
 
-### TeamService
+Ce document fournit des exemples de réponses typiques aux requêtes GET pour chaque service du projet.
 
-#### Créer une équipe
+## TeamService
+
+### Récupérer une Équipe par ID avec Détails sur les Joueurs
+
+- **Requête** : `GET /teams/2/withPlayerDetails`
+- **Réponse** :
 
 ```json
-POST /teams
+{
+    "id": 2,
+    "name": "AS Ajaccio",
+    "city": "Ajaccio",
+    "coach": "Chevens",
+    "players": [
+        {
+            "id": 5,
+            "name": "Ronaldo",
+            "position": "attaquant"
+        },
+        {
+            "id": 6,
+            "name": "Messi",
+            "position": "milieu"
+        },
+        {
+            "id": 12,
+            "name": "Piqué",
+            "position": "défenseur"
+        },
+        {
+            "id": 18,
+            "name": "Neuer",
+            "position": "gardien"
+        }
+    ]
+}
+```
+
+## PlayerService
+
+### Récupérer un joueur par ID avec Détail sur l'équipe
+
+- **Requête** : `GET /players/6/withTeamDetails`
+- **Réponse** :
+
+```json
+{
+    "name": "Messi",
+    "id": 6,
+    "position": "attaquant",
+    "team": {
+        "id": 2,
+        "name": "AS Ajaccio",
+        "coach": "Chevens",
+        "city": "Ajaccio"
+    }
+}
+```
+
+## MatchService
+
+### Récupérer un Match par ID avec Détails
+
+- **Requête** : `GET /football-matches/11`
+- **Réponse** :
+
+```json
+{
+    "id": 11,
+    "matchDate": "2023-10-15T21:16:18.000+0000",
+    "refereeName": "Luc",
+    "stadium": "Camp Nou",
+    "winnerId": 3,
+    "perdantId": 2,
+    "homeTeam": 3,
+    "awayTeam": 2,
+    "homeTeamScore": 3,
+    "awayTeamScore": 2,
+    "matchTeamStats": [
+        {
+            "id": 7,
+            "nombreDeTir": 15,
+            "tirCadre": 6,
+            "but": 2,
+            "possession": 65,
+            "passes": 650,
+            "fautes": 0,
+            "cartonJaune": 1,
+            "cartonRouge": 0,
+            "horsJeu": 1,
+            "corner": 2,
+            "teamId": 2
+        },
+        {
+            "id": 8,
+            "nombreDeTir": 21,
+            "tirCadre": 5,
+            "but": 3,
+            "possession": 35,
+            "passes": 350,
+            "fautes": 0,
+            "cartonJaune": 1,
+            "cartonRouge": 0,
+            "horsJeu": 8,
+            "corner": 5,
+            "teamId": 3
+        }
+    ],
+    "goalScorers": [
+        {
+            "id": 7,
+            "goals": 3,
+            "player": 1
+        },
+        {
+            "id": 8,
+            "goals": 1,
+            "player": 17
+        },
+        {
+            "id": 9,
+            "goals": 1,
+            "player": 18
+        }
+    ],
+    "assists": [
+        {
+            "id": 9,
+            "assists": 2,
+            "player": 21
+        },
+        {
+            "id": 10,
+            "assists": 1,
+            "player": 6
+        }
+    ],
+    "appearancePlayers": [
+        {
+            "teamId": 2,
+            "players": [
+                7,
+                8,
+                1,
+                6,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+            ]
+        },
+        {
+            "teamId": 3,
+            "players": [
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26
+            ]
+        }
+    ],
+    "matchNull": false
+}
+```
+
+### Récupérer le Nombre d'Apparitions d'un Joueur pour la Saison
+
+- **Requête** : `GET /players-appearances/7`
+- **Réponse** :
+
+```json
+{
+    "playerId": 7,
+    "appearances": 3
+}
+```
+
+### Récupérer le Nombre de Buts d'un Joueur pour la Saison
+
+- **Requête** : `GET /goalscorers/1`
+- **Réponse** :
+
+```json
+{
+    "playerId": 1,
+    "goals": 6
+}
+```
+
+### Récupérer le Nombre de Passes Décisives d'un Joueur pour la Saison
+
+- **Requête** : `GET /assists/46`
+- **Réponse** :
+
+```json
+{
+    "playerId": 46,
+    "assists": 6
+}
+```
+
+## StatsService
+
+### Récupérer les Statistiques d'une Équipe pour la Saison
+
+- **Requête** : `GET /stats/team-stats/2`
+- **Réponse** :
+
+```json
+{
+    "team": {
+        "id": 2,
+        "name": "AS Ajaccio",
+        "coach": "Chevens",
+        "city": "Ajaccio"
+    },
+    "matchesPlayed": 3,
+    "goalsScored": 5,
+    "goalsConceded": 9,
+    "wins": 0,
+    "losses": 2,
+    "draws": 1,
+    "goalDifference": -4
+}
+```
+
+### Récupérer les Statistiques d'un Joueur pour la Saison
+
+- **Requête** : `GET /stats/player-stats/46`
+- **Réponse** :
+
+```json
+{
+    "player": {
+        "id": 46,
+        "name": "Suarez",
+        "position": "attaquant",
+        "teamId": 5
+    },
+    "appearances": 3,
+    "goalsScored": 4,
+    "assists": 6
+}
+```
+
+
+
+# Exemples de Requêtes POST et PUT
+
+## TeamService
+
+### Créer une équipe
+
+- **Requête** : `POST /teams`
+
+```json
 
 {
     "city": "Nice",
@@ -61,12 +371,13 @@ POST /teams
 }
 ```
 
-### PlayerService
+## PlayerService
 
-#### Créer un joueur
+### Créer un joueur
+
+- **Requête** : `POST /players`
 
 ```json
-POST /players
 
 {
     "name": "Ronaldo",
@@ -75,12 +386,13 @@ POST /players
 }
 
 ```
-### MatchService
+## MatchService
 
-#### Créer un match de football
+### Créer un match de football
+
+- **Requête** : `POST /football-matches`
 
 ```json
-POST /football-matches
 
 {
     "matchDate": "2023-10-15T21:16:18.000+0000",
@@ -97,10 +409,11 @@ POST /football-matches
 
 
 ```
-#### Créer des statistiques d'équipe pour un match
+### Créer des statistiques d'équipe pour un match
+
+- **Requête** : `POST /match-team-stats`
 
 ```json
-POST /match-team-stats
 
 {
     "nombreDeTir": 15,
@@ -121,10 +434,11 @@ POST /match-team-stats
 
 
 ```
-#### Enregistrer un buteur
+### Enregistrer un buteur
+
+- **Requête** : `POST /goalscorers`
 
 ```json
-POST /goalscorers
 
 {
     "match": {
@@ -136,10 +450,11 @@ POST /goalscorers
 
 
 ```
-#### Enregistrer un passeur décisif
+### Enregistrer un passeur décisif
+
+- **Requête** : `POST /assists`
 
 ```json
-POST /assists
 
 {
     "assists": 2,
@@ -151,10 +466,11 @@ POST /assists
 
 
 ```
-#### Enregistrer la participation d'un joueur
+### Enregistrer la participation d'un joueur
+
+- **Requête** : `POST /players-appearances`
 
 ```json
-POST /players-appearances
 
 {
     "starter": true,
